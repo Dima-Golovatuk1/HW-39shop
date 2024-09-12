@@ -1,0 +1,48 @@
+.main{
+    background-image: url(https://img.freepik.com/free-vector/circles-background-dark-tones_60389-166.jpg);
+    background-position: center;
+    background-size: cover;
+}
+
+.list{
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+.card{
+    width: 300px;
+    position: relative;
+}
+
+
+.card-img-top{
+    width: 100%;
+    height: 300px;
+}
+
+
+.card-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.btn-buy{
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+
+
