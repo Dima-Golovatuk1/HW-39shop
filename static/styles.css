@@ -1,7 +1,8 @@
-.main{
-    background-image: url(https://img.freepik.com/free-vector/circles-background-dark-tones_60389-166.jpg);
+body{
+    background-image: url(https://t4.ftcdn.net/jpg/05/71/83/47/360_F_571834789_ujYbUnH190iUokdDhZq7GXeTBRgqYVwa.jpg);
     background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .list{
@@ -41,8 +42,76 @@
     justify-content: center;
 }
 
+.cod{
+    font-size: 18px;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 60px;
+}
 
 
+.card-solo{
+    width: 70vw;
+    display: flex;
+    flex-direction: row;
+}
 
 
+.card-img-solo{
+    width: 50%;
+}
 
+
+.text-num-success{
+    color: green;
+}
+
+
+.text-num-danger{
+    color: red;
+}
+
+
+.card-title-solo {
+    overflow: hidden;
+    text-overflow: normal;
+    white-space: wrap;
+}
+
+
+.card-text-solo {
+    overflow: hidden;
+    text-overflow: normal;
+    white-space: wrap;
+}
+
+
+.btn-solo{
+    padding: 15px 50px;
+    margin-bottom: 30px;
+}
+
+
+.feedback{
+    background-color: rgb(207, 207, 207);
+    width: 70vw;
+    padding: 15px 10px;
+}
+
+
+.form-control-text{
+    height: 300px;
+}
+
+.navbar-nav{
+    gap: 20px;
+}
+
+
+.nav-link:hover{
+    color: blue;
+}
