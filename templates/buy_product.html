@@ -46,25 +46,27 @@
     </header>
     <div class="container">
         <div class="card card-solo">
-            <img src="{{ img }}" class="card-img-solo" alt="{{ name }}">
+            <img src="{{ product[0][3] }}" class="card-img-solo" alt="{{ product[0][1] }}">
             <div class="card-body card-body-solo">
-                <p class="cod">код товару: {{ id }}</p>
-                {% if number > 0 %}
+                <p class="cod">код товару: {{ product[0][0] }}</p>
+                {% if product[0][5] > 0 %}
                 <p class="text-num-success">Є в наявності</p>
-                {% elif number == 0 %}
+                {% elif product[0][5] == 0 %}
                 <p class="text-num-danger">немає в наявності</p>
                 {% endif %}
 
-                <h2 class="card-title card-title-solo">{{ name }}</h2>
-                <p class="card-text card-text-solo">{{ description }}</p>
-                <a href="#" class="btn btn-success btn-solo">Buy</a>
+                <h2 class="card-title card-title-solo">{{ product[0][1] }}</h2>
+                <p class="card-text card-text-solo">{{ product[0][2] }}</p>
+                <p class="card-text card-text-solo">Ціна: {{product[0][4] }}</p>
+                <a href="#" class="btn btn-success btn-solo">Купити</a>
                 <p>може сподобатись:</p>
                 <div class="card" style="width: 18rem;">
-                    <img src="{{ random_product.img }}" class="card-img-top" alt="...">
+                    <img src="{{ product_random[0][3] }}" class="card-img-top" alt="product_random[0][1]">
                     <div class="card-body">
-                        <h5 class="card-title">{{ random_product.name }}</h5>
-                        <p class="card-text">{{ random_product.description }}</p>
-                        <a href="/buy_product/{{ num }}" class="btn btn-success">Buy</a>
+                        <h5 class="card-title">{{ product_random[0][1] }}</h5>
+                        <p class="card-text">{{ product_random[0][2] }}</p>
+                        <p class="card-text card-text-solo">Ціна: {{product_random[0][4] }}</p>
+                        <a href="/buy_product/{{ product_random[0][0] }}" class="btn btn-success">Купити</a>
                     </div>
                 </div>
                 

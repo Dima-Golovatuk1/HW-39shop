@@ -1,6 +1,5 @@
 from flask import Flask, render_template
-from data import products, products_list
-import data
+from data import get_products, get__one__products
 import random
 
 app = Flask(__name__)
@@ -8,23 +7,23 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    products_list = get_products()
     return render_template('index.html',  products=products_list)
 
 
 @app.route('/buy_product/<int:id>/')
 def tours(id):
-    if id in products:
-        num = random.randrange(1, len(products))
+    print(id)
+    products_list = get_products()
+    product = get__one__products(id-1)
+    num = random.randrange(1, len(products_list))
+    product_random = get__one__products(num)
+    
+    if id <= len(products_list) and id > 0:
+        num = random.randrange(1, len(products_list))
         return render_template('buy_product.html',
-                                products = data.products[id],
-                                id = id,
-                                number = products[id]['number'],
-                                name=products[id]['name'],
-                                description=products[id]['description'], 
-                                price=products[id]['price'], 
-                                img=products[id]['img'], 
-                                random_product=products.get(num),
-                                num=num)
+                                product = product,
+                                product_random = product_random)
     else:
         return "Product not found", 404
 
