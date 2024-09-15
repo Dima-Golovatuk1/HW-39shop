@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html',  products=products)
+    return render_template('index.html',  products=products_list)
 
 
 @app.route('/buy_product/<int:id>/')
