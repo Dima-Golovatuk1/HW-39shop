@@ -1,10 +1,10 @@
 from flask import Flask, render_template
-from data import products
+from data import products, products_list
 import data
 import random
 
 app = Flask(__name__)
-
+print(products_list)
 
 @app.route('/')
 def index():

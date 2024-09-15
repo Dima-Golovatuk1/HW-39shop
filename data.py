@@ -1,3 +1,39 @@
+import psycopg2
+
+host = '127.0.0.1'
+user = 'postgres'
+password = '08112007'
+db_name = 'HW-39shop'
+
+
+try:
+    connection = psycopg2.connect(
+        host=host,
+        user=user,
+        password=password,
+        database = db_name
+    )
+
+    cursor = connection.cursor()
+    cursor.execute(
+        """SELECT * FROM products"""
+    )
+    products_list = cursor.fetchall()
+
+
+
+
+except Exception as _ex:
+    print('[INFO] Error while working with PostgreSQL', _ex)
+finally:
+    if connection:
+        cursor.close()
+        connection.close()
+        print('[INFO] PostgreSQL connection closed')
+
+# print(products_list)
+for i in products_list:
+    print(i[1])
 products = {
     1: {
         'name': 'Бездротові навушники',
