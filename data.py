@@ -33,7 +33,7 @@ finally:
 
 # print(products_list)
 for i in products_list:
-    print(i[1])
+    print(i[3])
 products = {
     1: {
         'name': 'Бездротові навушники',

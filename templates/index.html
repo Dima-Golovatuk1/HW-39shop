@@ -47,11 +47,11 @@
             <ul class="list d-flex">
                 {% for product in products.values() %}
                 <li class="card">
-                    <img class="card-img-top" src="{{ product.img }}" alt="{{ product.name }}">
+                    <img class="card-img-top" src="{{ product[3] }}" alt="{{ product[1] }}">
                     <div class="card-body">
-                        <h2 class="card-title">{{ product.name }}</h2>
-                        <p class="card-text">{{ product.description }}</p>
-                        <p class="card-text">Ціна: {{ product.price }}</p>
+                        <h2 class="card-title">{{ product[1] }}</h2>
+                        <p class="card-text">{{ product[2] }}</p>
+                        <p class="card-text">Ціна: {{ product[4] }}</p>
                         <a href="/buy_product/{{ loop.index }}/" class="btn btn-success btn-buy">Buy</a>
                     </div>
                 </li>

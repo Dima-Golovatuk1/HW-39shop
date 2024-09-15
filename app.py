@@ -4,7 +4,7 @@ import data
 import random
 
 app = Flask(__name__)
-print(products_list)
+# print(products_list)
 
 @app.route('/')
 def index():
