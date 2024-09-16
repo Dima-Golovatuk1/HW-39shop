@@ -142,7 +142,7 @@ def register_user(name, email, password):
 
         cursor = connection.cursor()
         cursor.execute(
-            """INSERT INTO feedback (name, email, password) VALUES (%s, %s, %s)""",
+            """INSERT INTO users (name, email, password) VALUES (%s, %s, %s)""",
             (name, email, password)
         )
         connection.commit()
