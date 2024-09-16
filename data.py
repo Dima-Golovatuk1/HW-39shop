@@ -124,4 +124,34 @@ def get_feedback():
             cursor.close()
             connection.close()
             print('[INFO] PostgreSQL connection closed')
-get_products()
+
+
+def register_user(name, email, password):
+    host = '127.0.0.1'
+    user = 'postgres'
+    password = '08112007'
+    db_name = 'HW-39shop'
+
+    try:
+        connection = psycopg2.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=db_name
+        )
+
+        cursor = connection.cursor()
+        cursor.execute(
+            """INSERT INTO feedback (name, email, password) VALUES (%s, %s, %s)""",
+            (name, email, password)
+        )
+        connection.commit()
+
+    except Exception as _ex:
+        print('[INFO] Error while working with PostgreSQL', _ex)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            print('[INFO] PostgreSQL connection closed')
+

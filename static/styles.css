@@ -141,3 +141,26 @@ body{
     width: 60%;
     margin-bottom: 15px;
 }
+
+
+.form-login .container{
+    display: flex;
+    justify-content: center;
+}
+
+
+.login-form{
+    color: white;
+    width: 60%;
+}
+
+
+.login-div{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.reg-link:hover{
+    color: rgb(0, 140, 255);
+}

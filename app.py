@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
-from data import get_products, get__one__products, put_feedback, get_feedback
+from werkzeug.security import generate_password_hash, check_password_hash
+from data import get_products, get__one__products, put_feedback, get_feedback, register_user
 import random
 
 app = Flask(__name__)
@@ -9,6 +10,23 @@ app = Flask(__name__)
 def index():
     products_list = get_products()
     return render_template('index.html',  products=products_list)
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        name = request.form['name']
+        email = request.form['email']
+        hash = generate_password_hash(request.form['password'])
+        print(name, email, hash)
+        register_user(name, email, hash)
+        return render_template('login.html')
+    return render_template('register.html')
 
 
 @app.route('/buy_product/<int:id>/', methods=["GET", "POST"])
