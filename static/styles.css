@@ -5,6 +5,11 @@ body{
     background-repeat: no-repeat;
 }
 
+
+.btn-outline-success{
+    margin-right: 20px;
+}
+
 .list{
     flex-wrap: wrap;
     gap: 10px;
