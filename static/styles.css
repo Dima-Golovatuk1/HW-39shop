@@ -46,11 +46,10 @@ body{
     font-size: 18px;
 }
 
-.container{
+.header .container{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 60px;
 }
 
 
@@ -114,4 +113,26 @@ body{
 
 .nav-link:hover{
     color: blue;
+}
+
+
+.container{
+    margin-bottom: 60px;
+    justify-content: start;
+}
+
+
+.card-body-feedback{
+    width: 60%;
+}
+
+
+.card-header{
+    width: 60%;
+}
+
+
+.card-feedback{
+    width: 60%;
+    margin-bottom: 15px;
 }

@@ -15,34 +15,35 @@
 <body>
     <header class="header">
         <div class="container">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/"><img src="https://kor.ill.in.ua/m/400x253/1376932.jpg" alt="logo" style="height: 50px;"></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">каталог</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">служба підтримки</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">кошик</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="/"><img src="https://kor.ill.in.ua/m/400x253/1376932.jpg" alt="logo"
+                            style="height: 50px;"></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">каталог</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">служба підтримки</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">кошик</a>
+                            </li>
+                        </ul>
+                        <form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </div>
+            </nav>
+        </div>
     </header>
     <div class="container">
         <div class="card card-solo">
@@ -69,23 +70,42 @@
                         <a href="/buy_product/{{ product_random[0][0] }}" class="btn btn-success">Купити</a>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
     <div class="container">
-        <form class="feedback">
+        <form class="feedback" method="POST" action="/buy_product/{{ product[0][0] }}/">
             <h2>Залишити відгук</h2>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Прізвище ім'я</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label for="name" class="form-label">Прізвище ім'я</label>
+                <input type="text" class="form-control" id="name" name="name" required>
             </div>
             <div class="mb-3">
-                <label for="feedback" class="form-label">відгук</label>
-                <input type="text" class="form-control form-control-text" id="feedback">
+                <label for="feedback" class="form-label">Відгук</label>
+                <textarea class="form-control form-control-text" id="feedback" name="feedback" rows="4"
+                    required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+    </div>
+    <div class="container">
+        {% for feedback in feedback_list %}
+        {% if feedback[3] == product[0][0] %}
+        <div class="card card-feedback">
+
+
+            <div class="card-header">
+                {{ feedback[1] }}
+            </div>
+            <div class="card-body card-body-feedback">
+                <p class="card-text card-text-solo">
+                    {{ feedback[2] }}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
