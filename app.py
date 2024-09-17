@@ -1,21 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import LoginManager, login_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from data import (get_products, get__one__products, put_feedback, get_feedback, register_user, get_users,
                   get_users_by_email)
-from user_login import UserLogin
 import random
 
 app = Flask(__name__)
 app.secret_key = 'sdsgagsagsduipvnols'
 
 
-login_manager = LoginManager(app)
-
-@login_manager.user_loader
-def load_user(user_id):
-    print("load_user")
-    return UserLogin().fromdb(user_id)
 
 
 
@@ -28,10 +21,14 @@ def index():
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
+        print(request.form['email'])
+        print(request.form['password'])
         user = get_users_by_email(request.form['email'])
         if user and check_password_hash(user[3], request.form['password']):
-
-
+            login_user(user, remember=request.form['remember'])
+            return redirect(url_for('index'))
+        else:
+            flash("error")
     return render_template('login.html')
 
 
@@ -63,13 +60,13 @@ def buy_product(id):
         num = random.randrange(1, len(products_list))
         product_random = get__one__products(num)
         feedback_list = get_feedback()
-        
+
         if request.method == 'POST':
             name = request.form['name']
             feedback = request.form['feedback']
             put_feedback(name, feedback, id)
             return redirect(url_for('buy_product', id=id))
-        
+
         return render_template('buy_product.html',
                                 product=product,
                                 product_random=product_random,

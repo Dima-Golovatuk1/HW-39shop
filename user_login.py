@@ -2,7 +2,7 @@ from data import get_user
 
 class UserLogin():
     def fromdb(self, user_id, db):
-        self.__user = db.get_user(user_id)
+        self.__user = db(user_id)
         return self
 
     def create(self, user):
@@ -19,4 +19,4 @@ class UserLogin():
         return False
 
     def get_id(self):
-        return str(self.__user['id'])
+        return str(self.__user[0])
