@@ -2,14 +2,41 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from data import (get_products, get__one__products, put_feedback, get_feedback, register_user, get_users,
-                  get_users_by_email)
+                  get_users_by_email, get_users_by_id)
 import random
 
 app = Flask(__name__)
 app.secret_key = 'sdsgagsagsduipvnols'
 
 
+class User:
+    def __init__(self, id, name, email, password, admin):
+        self.id = id
+        self.name = name
+        self.email = email
+        self.password = password
+        self.admin = admin
 
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return get_users_by_id(user_id)
 
 
 @app.route('/')
