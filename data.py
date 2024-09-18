@@ -203,6 +203,7 @@ def get_users_by_email(email):
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM users WHERE email = %s""", (email,))
         user_info = cursor.fetchone()
+        print(user_info)
         return user_info
 
     except Exception as _ex:
@@ -231,7 +232,6 @@ def get_users_by_id(id):
         cursor = connection.cursor()
         cursor.execute("""SELECT * FROM users WHERE id = %s""", (id,))
         user_info = cursor.fetchone()
-        print(user_info)
         return user_info
 
     except Exception as _ex:
@@ -242,4 +242,5 @@ def get_users_by_id(id):
             connection.close()
             print('[INFO] PostgreSQL connection closed')
 
-get_users_by_id(5)
+
+

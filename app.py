@@ -36,7 +36,14 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return get_users_by_id(user_id)
+    user = get_users_by_id(user_id)  # Ожидается, что эта функция возвращает кортеж (например, данные пользователя)
+
+    if user:
+        # Преобразуем кортеж в объект User
+        return User(id=user[0], name=user[1], email=user[2], password=user[3],
+                    admin=user[4] if len(user) > 4 else False)
+
+    return None  # Если пользователь не найден, возвращаем None
 
 
 @app.route('/')
@@ -48,8 +55,25 @@ def index():
 @app.route('/login', methods=["POST", "GET"])
 def login():
     if request.method == "POST":
-        print(request.form['email'])
-        print(request.form['password'])
+        email = request.form['email']
+        password = request.form['password']
+        list_users = get_users()
+        user = None
+        for i in list_users:
+            if i[2] == email:
+                user = i
+                break
+
+        if user:
+            if check_password_hash(user[3], password):
+                user_obj = User(id=user[0], name=user[1], email=user[2], password=user[3], admin=user[4])
+                login_user(user_obj)
+                flash('Ви успішно увійшли!', 'success')
+                return redirect(url_for('index'))
+            else:
+                return render_template('login.html', error=2)
+        else:
+            return render_template('login.html', error=1)
     return render_template('login.html')
 
 
@@ -74,6 +98,7 @@ def register():
 
 
 @app.route('/buy_product/<int:id>/', methods=["GET", "POST"])
+@login_required
 def buy_product(id):
     products_list = get_products()
     if id <= len(products_list) and id > 0:
