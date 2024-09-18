@@ -1,40 +1,34 @@
 import psycopg2
 import random
+import logging
+logging.basicConfig(level=logging.INFO)
 
 
 def get_products():
-    host = '127.0.0.1'
-    user = 'postgres'
-    password = '08112007'
-    db_name = 'HW-39shop'
-
-
     try:
         connection = psycopg2.connect(
-            host=host,
-            user=user,
-            password=password,
-            database = db_name
+            host='127.0.0.1',
+            user='postgres',
+            password='08112007',
+            database='HW-39shop'
         )
-
         cursor = connection.cursor()
-        cursor.execute(
-            """SELECT * FROM products"""
-        )
+        cursor.execute("SELECT * FROM products")
         products_list = cursor.fetchall()
-        print(products_list)
         return products_list
-
     except Exception as _ex:
-        print('[INFO] Error while working with PostgreSQL', _ex)
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
     finally:
         if connection:
             cursor.close()
             connection.close()
-            print('[INFO] PostgreSQL connection closed')
+            logging.info('[INFO] PostgreSQL connection closed')
+
 
 
 def get__one__products(id):
+    if id < 0:
+        raise ValueError("ID cannot be negative")
     host = '127.0.0.1'
     user = 'postgres'
     password = '08112007'
@@ -47,21 +41,20 @@ def get__one__products(id):
             password=password,
             database=db_name
         )
-
         cursor = connection.cursor()
-        cursor.execute(
-            """SELECT * FROM products LIMIT 1 OFFSET %s""", (id,)
-        )
+        logging.info(f"Fetching product with OFFSET {id}")
+        cursor.execute("""SELECT * FROM products LIMIT 1 OFFSET %s""", (id,))
         product = cursor.fetchall()
         return product
 
     except Exception as _ex:
-        print('[INFO] Error while working with PostgreSQL', _ex)
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
     finally:
         if connection:
             cursor.close()
             connection.close()
-            print('[INFO] PostgreSQL connection closed')
+            logging.info('[INFO] PostgreSQL connection closed')
+
 
 
 def put_feedback(name, feedback, id):
@@ -86,13 +79,15 @@ def put_feedback(name, feedback, id):
         )
         connection.commit()
 
+
     except Exception as _ex:
-        print('[INFO] Error while working with PostgreSQL', _ex)
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
     finally:
+
         if connection:
             cursor.close()
             connection.close()
-            print('[INFO] PostgreSQL connection closed')
+            logging.info('[INFO] PostgreSQL connection closed')
 
 
 def get_feedback():
@@ -101,29 +96,26 @@ def get_feedback():
     password = '08112007'
     db_name = 'HW-39shop'
 
-
     try:
         connection = psycopg2.connect(
             host=host,
             user=user,
             password=password,
-            database = db_name
+            database=db_name
         )
-
         cursor = connection.cursor()
-        cursor.execute(
-            """SELECT * FROM feedback"""
-        )
+        cursor.execute("""SELECT * FROM feedback""")
         feedback_list = cursor.fetchall()
         return feedback_list
 
+
     except Exception as _ex:
-        print('[INFO] Error while working with PostgreSQL', _ex)
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
     finally:
         if connection:
             cursor.close()
             connection.close()
-            print('[INFO] PostgreSQL connection closed')
+            logging.info('[INFO] PostgreSQL connection closed')
 
 
 def register_user(name, email, psw):
@@ -147,13 +139,14 @@ def register_user(name, email, psw):
         )
         connection.commit()
 
+
     except Exception as _ex:
-        print('[INFO] Error while working with PostgreSQL', _ex)
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
     finally:
         if connection:
             cursor.close()
             connection.close()
-            print('[INFO] PostgreSQL connection closed')
+            logging.info('[INFO] PostgreSQL connection closed')
 
 
 def get_users():
@@ -177,13 +170,14 @@ def get_users():
         user_list = cursor.fetchall()
         return user_list
 
+
     except Exception as _ex:
-        print('[INFO] Error while working with PostgreSQL', _ex)
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
     finally:
         if connection:
             cursor.close()
             connection.close()
-            print('[INFO] PostgreSQL connection closed')
+            logging.info('[INFO] PostgreSQL connection closed')
 
 
 def get_users_by_email(email):
@@ -206,13 +200,14 @@ def get_users_by_email(email):
         print(user_info)
         return user_info
 
+
     except Exception as _ex:
-        print('[INFO] Error while working with PostgreSQL', _ex)
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
     finally:
         if connection:
             cursor.close()
             connection.close()
-            print('[INFO] PostgreSQL connection closed')
+            logging.info('[INFO] PostgreSQL connection closed')
 
 
 def get_users_by_id(id):
@@ -234,13 +229,14 @@ def get_users_by_id(id):
         user_info = cursor.fetchone()
         return user_info
 
+
     except Exception as _ex:
-        print('[INFO] Error while working with PostgreSQL', _ex)
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
     finally:
         if connection:
             cursor.close()
             connection.close()
-            print('[INFO] PostgreSQL connection closed')
+            logging.info('[INFO] PostgreSQL connection closed')
 
 
 

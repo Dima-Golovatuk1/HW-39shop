@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, login_user, login_required
+from flask_login import LoginManager, login_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from data import (get_products, get__one__products, put_feedback, get_feedback, register_user, get_users,
                   get_users_by_email, get_users_by_id)
@@ -36,20 +36,25 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    user = get_users_by_id(user_id)  # Ожидается, что эта функция возвращает кортеж (например, данные пользователя)
-
+    user = get_users_by_id(user_id)
     if user:
-        # Преобразуем кортеж в объект User
         return User(id=user[0], name=user[1], email=user[2], password=user[3],
                     admin=user[4] if len(user) > 4 else False)
-
-    return None  # Если пользователь не найден, возвращаем None
+    return None
 
 
 @app.route('/')
 def index():
     products_list = get_products()
     return render_template('index.html',  products=products_list)
+
+
+@app.route('/admin')
+@login_required
+def admin_panel():
+    if current_user.admin != 1:
+        return redirect(url_for('index'))
+    return render_template('admin.html')
 
 
 @app.route('/login', methods=["POST", "GET"])
@@ -63,7 +68,6 @@ def login():
             if i[2] == email:
                 user = i
                 break
-
         if user:
             if check_password_hash(user[3], password):
                 user_obj = User(id=user[0], name=user[1], email=user[2], password=user[3], admin=user[4])
@@ -98,7 +102,6 @@ def register():
 
 
 @app.route('/buy_product/<int:id>/', methods=["GET", "POST"])
-@login_required
 def buy_product(id):
     products_list = get_products()
     if id <= len(products_list) and id > 0:
