@@ -23,12 +23,6 @@ def login():
     if request.method == "POST":
         print(request.form['email'])
         print(request.form['password'])
-        user = get_users_by_email(request.form['email'])
-        if user and check_password_hash(user[3], request.form['password']):
-            login_user(user, remember=request.form['remember'])
-            return redirect(url_for('index'))
-        else:
-            flash("error")
     return render_template('login.html')
 
 
