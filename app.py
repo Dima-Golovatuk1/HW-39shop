@@ -109,6 +109,15 @@ def register():
     return render_template('register.html')
 
 
+@app.route('/office/<int:user_id>')
+@login_required
+def office(user_id):
+    if current_user.id != user_id:
+        flash('У вас немає доступу до цього кабінету.', 'danger')
+        return redirect(url_for('index'))
+    user_info = get_users_by_id(user_id)
+    return render_template('office.html', user=user_info)
+
 @app.route('/buy_product/<int:id>/', methods=["GET", "POST"])
 def buy_product(id):
     products_list = get_products()
