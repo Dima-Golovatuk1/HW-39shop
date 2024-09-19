@@ -4,18 +4,25 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from data import (get_products, get__one__products, put_feedback, get_feedback, register_user, get_users,
                   get_users_by_email, get_users_by_id)
 import random
+from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = 'sdsgagsagsduipvnols'
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(minutes=1)
 
 
 class User:
-    def __init__(self, id, name, email, password, admin):
+    def __init__(self, id, name, email, password, admin, rem=None):
         self.id = id
         self.name = name
         self.email = email
         self.password = password
         self.admin = admin
+        self.rem = rem
+        self.REMEMBER_COOKIE_DURATION = 60
+
+    def remember(self):
+        return self.rem == 'on'
 
     def is_authenticated(self):
         return True
@@ -62,6 +69,7 @@ def login():
     if request.method == "POST":
         email = request.form['email']
         password = request.form['password']
+        rem = request.form.get('remember', 'off')
         list_users = get_users()
         user = None
         for i in list_users:
@@ -70,8 +78,8 @@ def login():
                 break
         if user:
             if check_password_hash(user[3], password):
-                user_obj = User(id=user[0], name=user[1], email=user[2], password=user[3], admin=user[4])
-                login_user(user_obj)
+                user_obj = User(id=user[0], name=user[1], email=user[2], password=user[3], admin=user[4], rem=rem)
+                login_user(user_obj, remember=user_obj.remember())
                 flash('Ви успішно увійшли!', 'success')
                 return redirect(url_for('index'))
             else:
