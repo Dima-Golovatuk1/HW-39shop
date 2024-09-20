@@ -164,3 +164,14 @@ body{
 .reg-link:hover{
     color: rgb(0, 140, 255);
 }
+
+
+.leave-link{
+    color: white;
+}
+
+
+.leave-link:hover,
+.leave-link:focus{
+    color: rgb(0, 140, 255);
+}

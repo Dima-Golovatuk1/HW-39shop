@@ -25,6 +25,36 @@ def get_products():
             logging.info('[INFO] PostgreSQL connection closed')
 
 
+def get_max_id_products():
+    host = '127.0.0.1'
+    user = 'postgres'
+    password = '08112007'
+    db_name = 'HW-39shop'
+
+    try:
+        connection = psycopg2.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=db_name
+        )
+
+        cursor = connection.cursor()
+        cursor.execute(
+            """SELECT MAX(id) FROM products;"""
+        )
+
+        max_id_product = cursor.fetchone()[0]  # Получаем одно значение
+        return max_id_product
+
+    except Exception as _ex:
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            logging.info('[INFO] PostgreSQL connection closed')
+
 
 def get__one__products(id):
     if id < 0:
@@ -49,6 +79,30 @@ def get__one__products(id):
 
     except Exception as _ex:
         logging.error('[INFO] Error while working with PostgreSQL', _ex)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            logging.info('[INFO] PostgreSQL connection closed')
+
+
+def add_product(name, description, img, price, number):
+    try:
+        connection = psycopg2.connect(
+            host='127.0.0.1',
+            user='postgres',
+            password='08112007',
+            database='HW-39shop'
+        )
+        cursor = connection.cursor()
+        cursor.execute(
+            """INSERT INTO products (name, description, img, price, number) VALUES (%s, %s, %s, %s, %s)""",
+            (name, description, img, price, number)
+        )
+        connection.commit()  # Добавьте commit, чтобы сохранить изменения
+        return "Product added successfully"
+    except Exception as _ex:
+        logging.error('[INFO] Error while working with PostgreSQL', exc_info=True)
     finally:
         if connection:
             cursor.close()
@@ -237,6 +291,3 @@ def get_users_by_id(id):
             cursor.close()
             connection.close()
             logging.info('[INFO] PostgreSQL connection closed')
-
-
-

@@ -1,14 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, login_user, login_required, current_user
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from data import (get_products, get__one__products, put_feedback, get_feedback, register_user, get_users,
-                  get_users_by_email, get_users_by_id)
+                  get_users_by_email, get_users_by_id, add_product, get_max_id_products)
 import random
 from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = 'sdsgagsagsduipvnols'
-app.config['REMEMBER_COOKIE_DURATION'] = timedelta(minutes=1)
 
 
 class User:
@@ -48,20 +47,6 @@ def load_user(user_id):
         return User(id=user[0], name=user[1], email=user[2], password=user[3],
                     admin=user[4] if len(user) > 4 else False)
     return None
-
-
-@app.route('/')
-def index():
-    products_list = get_products()
-    return render_template('index.html',  products=products_list)
-
-
-@app.route('/admin')
-@login_required
-def admin_panel():
-    if current_user.admin != 1:
-        return redirect(url_for('index'))
-    return render_template('admin.html')
 
 
 @app.route('/login', methods=["POST", "GET"])
@@ -109,19 +94,50 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/office/<int:user_id>')
+@app.route('/')
+def index():
+    products_list = get_products()
+    return render_template('index.html',  products=products_list)
+
+
+@app.route('/admin', methods=["GET", "POST"])
 @login_required
-def office(user_id):
-    if current_user.id != user_id:
-        flash('У вас немає доступу до цього кабінету.', 'danger')
+def admin_panel():
+    if current_user.admin != 1:
         return redirect(url_for('index'))
-    user_info = get_users_by_id(user_id)
+    if request.method == 'POST':
+        name =  request.form['name']
+        description =request.form['description']
+        img = request.form['img']
+        price = int(request.form['price'])
+        number = int(request.form['number'])
+        add_product(name, description, img, price, number)
+    return render_template('admin.html')
+
+
+@app.route('/office')
+@login_required
+def office():
+    user_info = get_users_by_id(current_user.id)
+    print(user_info)
     return render_template('office.html', user=user_info)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Ви успішно вийшли з облікового запису.', 'success')
+    return redirect(url_for('index'))
+
 
 @app.route('/buy_product/<int:id>/', methods=["GET", "POST"])
 def buy_product(id):
+    print(id)
+    max_id = get_max_id_products()
     products_list = get_products()
-    if id <= len(products_list) and id > 0:
+
+    if id <= max_id and id > 0:
         product = get__one__products(id - 1)
         num = random.randrange(1, len(products_list))
         product_random = get__one__products(num)
@@ -134,9 +150,10 @@ def buy_product(id):
             return redirect(url_for('buy_product', id=id))
 
         return render_template('buy_product.html',
-                                product=product,
-                                product_random=product_random,
-                                feedback_list=feedback_list)
+                               product=product,
+                               product_random=product_random,
+                               feedback_list=feedback_list,
+                               id=id)
     else:
         return "Product not found", 404
 

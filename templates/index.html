@@ -46,7 +46,7 @@
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                         {% if current_user.is_authenticated %}
-                        <a class="nav-link" href="/buy_product/{{user}}"> {{ current_user.name }} </a>
+                        <a class="nav-link" href="/office"> {{ current_user.name }} </a>
                         {% else %}
                         <a class="nav-link" href="{{ url_for('login') }}">Вхід в акаунт</a>
                         {% endif %}
@@ -65,7 +65,7 @@
                         <h2 class="card-title">{{ product[1] }}</h2>
                         <p class="card-text">{{ product[2] }}</p>
                         <p class="card-text">Ціна: {{ product[4] }}</p>
-                        <a href="/buy_product/{{ product[0] }}/" class="btn btn-success btn-buy">Купити</a>
+                        <a href="{{ url_for('buy_product', id=product[0]) }}" class="btn btn-success btn-buy">Купити</a>
                     </div>
                 </li>
                 {% endfor %}
