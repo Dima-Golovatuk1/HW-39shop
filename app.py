@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from data import (get_products, get__one__products, put_feedback, get_feedback, register_user, get_users,
-                  get_users_by_email, get_users_by_id, add_product, get_max_id_products)
+                  get_users_by_email, get_users_by_id, add_product, get_max_id_products, delete_product)
 import random
 from datetime import timedelta
 
@@ -100,21 +100,6 @@ def index():
     return render_template('index.html',  products=products_list)
 
 
-@app.route('/admin', methods=["GET", "POST"])
-@login_required
-def admin_panel():
-    if current_user.admin != 1:
-        return redirect(url_for('index'))
-    if request.method == 'POST':
-        name =  request.form['name']
-        description =request.form['description']
-        img = request.form['img']
-        price = int(request.form['price'])
-        number = int(request.form['number'])
-        add_product(name, description, img, price, number)
-    return render_template('admin.html')
-
-
 @app.route('/office')
 @login_required
 def office():
@@ -131,18 +116,66 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/admin', methods=["GET", "POST"])
+@login_required
+def admin_panel():
+    if current_user.admin != 1:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        name =  request.form['name']
+        description =request.form['description']
+        img = request.form['img']
+        price = int(request.form['price'])
+        number = int(request.form['number'])
+        add_product(name, description, img, price, number)
+    return render_template('admin.html')
+
+
+@app.route('/admin/add_product', methods=["GET", "POST"])
+@login_required
+def add_product_route():
+    if current_user.admin != 1:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        img = request.form['img']
+        price = int(request.form['price'])
+        number = int(request.form['number'])
+        add_product(name, description, img, price, number)
+    return render_template('add_product.html')
+
+
+@app.route('/admin/delete', methods=["GET", "POST"])
+@login_required
+def delete_product_route():
+    if current_user.admin != 1:
+        return redirect(url_for('index'))
+    if request.method == 'POST':
+        product_id = request.form['product_id']
+        delete_product(int(product_id))
+
+    return render_template('delete_product.html')
+
+
 @app.route('/buy_product/<int:id>/', methods=["GET", "POST"])
 def buy_product(id):
-    print(id)
     max_id = get_max_id_products()
     products_list = get_products()
 
     if id <= max_id and id > 0:
-        product = get__one__products(id - 1)
-        num = random.randrange(1, len(products_list))
-        product_random = get__one__products(num)
-        feedback_list = get_feedback()
+        product = get__one__products(id)
+        product_ids = [product[0] for product in products_list]
+        if not product:
+            return "Product not found", 404
+        
 
+        product_random = None
+        while not product_random or product_random[0] == product[0]:
+            product_random = get__one__products(random.choice(product_ids))
+
+
+        feedback_list = get_feedback()
         if request.method == 'POST':
             name = request.form['name']
             feedback = request.form['feedback']

@@ -72,9 +72,9 @@ def get__one__products(id):
             database=db_name
         )
         cursor = connection.cursor()
-        logging.info(f"Fetching product with OFFSET {id}")
-        cursor.execute("""SELECT * FROM products LIMIT 1 OFFSET %s""", (id,))
-        product = cursor.fetchall()
+        logging.info(f"Fetching product with ID {id}")
+        cursor.execute("""SELECT * FROM products WHERE id = %s""", (id,))
+        product = cursor.fetchone()
         return product
 
     except Exception as _ex:
@@ -109,6 +109,41 @@ def add_product(name, description, img, price, number):
             connection.close()
             logging.info('[INFO] PostgreSQL connection closed')
 
+
+def delete_product(id):
+    if id < 0:
+        raise ValueError("ID cannot be negative")
+
+    host = '127.0.0.1'
+    user = 'postgres'
+    password = '08112007'
+    db_name = 'HW-39shop'
+
+    try:
+        # Підключення до бази даних
+        connection = psycopg2.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=db_name
+        )
+        cursor = connection.cursor()
+        logging.info(f"Attempting to delete product with ID {id}")
+
+        # Виконання SQL-запиту на видалення
+        cursor.execute("""DELETE FROM products WHERE id = %s;""", (id,))
+
+        # Підтвердження змін
+        connection.commit()
+        logging.info(f"Product with ID {id} has been deleted")
+
+    except Exception as _ex:
+        logging.error('[INFO] Error while working with PostgreSQL', _ex)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            logging.info('[INFO] PostgreSQL connection closed')
 
 
 def put_feedback(name, feedback, id):
