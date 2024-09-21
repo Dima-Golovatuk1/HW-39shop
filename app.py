@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, json
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from data import (get_products, get__one__products, put_feedback, get_feedback, register_user, get_users,
                   get_users_by_email, get_users_by_id, add_product, get_max_id_products, delete_product)
 import random
+import git
 from datetime import timedelta
 
 app = Flask(__name__)
@@ -39,6 +40,16 @@ class User:
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
+@app.route('/update_server', methods=['POST'])
+def webhook():
+    if request.method == "POST":
+        repo = git.Repo('HW-39shop')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhen successfully', 200
+    else:
+        return 'Wrong event type', 400
 
 @login_manager.user_loader
 def load_user(user_id):
