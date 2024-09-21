@@ -168,7 +168,7 @@ def buy_product(id):
         product_ids = [product[0] for product in products_list]
         if not product:
             return "Product not found", 404
-        
+
 
         product_random = None
         while not product_random or product_random[0] == product[0]:
