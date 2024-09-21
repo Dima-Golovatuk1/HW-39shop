@@ -7,7 +7,7 @@ import random
 from datetime import timedelta
 
 app = Flask(__name__)
-app.secret_key = 'sdsgagsagsduipvnols'
+app.secret_key = 'qwecfcrdmlskhbmdfhagaslghsvdfjsgsj'
 
 
 class User:
